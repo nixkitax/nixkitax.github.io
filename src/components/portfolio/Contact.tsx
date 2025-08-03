@@ -7,7 +7,7 @@ import { Mail, Github, Linkedin, MapPin, Phone } from "lucide-react";
 
 const Contact = () => {
   const contactInfo = [
-    { icon: Mail, label: "Email", value: "nicol.ecemanuele@icloud.com", href: "mailto:nicol.ecemanuele@icloud.com" },
+    { icon: Mail, label: "Email", value: "nicol.eeemanuele@icloud.com", href: "mailto:nicol.ecemanuele@icloud.com" },
     { icon: Github, label: "GitHub", value: "github.com/nixkitax", href: "https://github.com/nixkitax" },
     { icon: Linkedin, label: "LinkedIn", value: "linkedin.com/in/nicol-emanuele", href: "https://linkedin.com/in/nicol-emanuele" },
     { icon: MapPin, label: "Location", value: "Stockholm, Sweden • Milan, Italy", href: null }
