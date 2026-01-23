@@ -4,7 +4,67 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-const Dialog = DialogPrimitive.Root
+let scrollLockCount = 0
+let scrollLockY = 0
+
+const lockBodyScroll = () => {
+  if (scrollLockCount === 0) {
+    scrollLockY = window.scrollY
+    document.body.style.position = "fixed"
+    document.body.style.top = `-${scrollLockY}px`
+    document.body.style.width = "100%"
+    document.body.style.overflow = "hidden"
+  }
+  scrollLockCount += 1
+}
+
+const unlockBodyScroll = () => {
+  scrollLockCount = Math.max(0, scrollLockCount - 1)
+  if (scrollLockCount === 0) {
+    document.body.style.position = ""
+    document.body.style.top = ""
+    document.body.style.width = ""
+    document.body.style.overflow = ""
+    window.scrollTo(0, scrollLockY)
+  }
+}
+
+const Dialog = (
+  props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>
+) => {
+  const { open: openProp, defaultOpen, onOpenChange, ...rest } = props
+  const isControlled = openProp !== undefined
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(
+    defaultOpen ?? false
+  )
+
+  const open = isControlled ? openProp : uncontrolledOpen
+
+  React.useEffect(() => {
+    if (open) {
+      lockBodyScroll()
+      return () => unlockBodyScroll()
+    }
+
+    return undefined
+  }, [open])
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!isControlled) {
+      setUncontrolledOpen(nextOpen)
+    }
+    onOpenChange?.(nextOpen)
+  }
+
+  return (
+    <DialogPrimitive.Root
+      modal={false}
+      open={open}
+      onOpenChange={handleOpenChange}
+      {...rest}
+    />
+  )
+}
 
 const DialogTrigger = DialogPrimitive.Trigger
 
@@ -19,7 +79,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "dialog-overlay fixed inset-0 z-50 bg-black/30 backdrop-blur-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -32,7 +92,14 @@ const DialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    <DialogPrimitive.Close asChild>
+      <div
+        className={cn(
+          "dialog-overlay fixed inset-0 z-40 bg-black/30 backdrop-blur-md animate-in fade-in-0"
+        )}
+        aria-hidden="true"
+      />
+    </DialogPrimitive.Close>
     <DialogPrimitive.Content
       ref={ref}
       className={cn(

@@ -13,8 +13,9 @@ const Hero = () => {
             Cybersecurity Researcher & Developer
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            M.S. Computer Science student passionate about cryptography, blockchain security, 
-            and vector database research. Currently pursuing advanced studies across European universities.
+            M.S. Computer Science student passionate about cryptography,
+            blockchain security, and vector database research. Currently
+            pursuing advanced studies across European universities.
           </p>
         </div>
 
@@ -26,21 +27,21 @@ const Hero = () => {
           </div>
           <div>+39 334 368 7232 • nicol.eeemanuele@icloud.com</div>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <a href="/NicolEmanueleCV.pdf">
             <Button variant="default" size="lg">
-            <Download className="mr-2 w-5 h-5" />
-            Download CV
-          </Button>
+              <Download className="mr-2 w-5 h-5" />
+              Download CV
+            </Button>
           </a>
           <a href="https://github.com/nixkitax?tab=repositories">
             <Button variant="outline" size="lg">
-            View Projects
-          </Button>
+              View Projects
+            </Button>
           </a>
         </div>
-        
+
         {/* Social Links */}
         <div className="flex gap-4 justify-center">
           <Button variant="ghost" size="icon" className="rounded-full">

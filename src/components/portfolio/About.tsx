@@ -1,37 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Award, Building, Calendar } from "lucide-react";
+import { GraduationCap, Award } from "lucide-react";
+import { certifications, education } from "@/data/about";
 
 const About = () => {
-  const education = [
-    {
-      degree: "M.S. Computer Science",
-      institution: "Università degli Studi Milano-Bicocca",
-      location: "Milan, Italy",
-      year: "2025",
-      type: "Master's"
-    },
-    {
-      degree: "B.S. Computer Science", 
-      institution: "Università degli Studi dell'Insubria",
-      location: "Varese, Italy", 
-      year: "2023",
-      type: "Bachelor's"
-    },
-    {
-      degree: "Erasmus Experience",
-      institution: "Stockholm University",
-      location: "Stockholm, Sweden",
-      year: "2024", 
-      type: "Exchange"
-    }
-  ];
-
-  const certifications = [
-    "CompTIA Security+ (Expected 12/25)",
-    "Google Cybersecurity Professional Certificate"
-  ];
-
   return (
     <section id="about" className="py-20 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
@@ -40,8 +12,8 @@ const About = () => {
             Education & Background
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Currently pursuing advanced studies in computer science with focus on cybersecurity, 
-            cryptography, and vector database research across European universities.
+            MSc student focused on algorithms, optimization, software engineering, and reliable
+            system design, with research interests in security and cryptography.
           </p>
         </div>
 
