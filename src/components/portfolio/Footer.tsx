@@ -28,14 +28,18 @@ const Footer = () => {
       <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 left-0 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
 
-      <div className="relative mx-auto max-w-6xl px-6 py-12">
+      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_auto] md:items-center">
           <div className="flex flex-col items-center md:items-start gap-4">
             <div className="flex items-center gap-3">
               <div className="h-14 w-14 overflow-hidden rounded-full ring-2 ring-primary/20">
                 <img
-                  src="/profile.png"
+                  src="/profile-512.jpg"
                   alt="Nicol Emanuele"
+                  width={96}
+                  height={96}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover"
                 />
               </div>

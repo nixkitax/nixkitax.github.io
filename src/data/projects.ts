@@ -1,6 +1,7 @@
 export type Project = {
   title: string;
   description: string;
+  image: string;
   tech: string[];
   status: string;
   github: string;
@@ -10,7 +11,8 @@ export const projects: Project[] = [
   {
     title: "Cloud Honeypot & SIEM Attack Visualization Lab",
     description:
-      "Comprehensive cloud-based security lab implementing honeypot systems and SIEM attack visualization. Features automated threat detection, log analytics, and geolocation-based attack mapping using Azure cloud infrastructure.",
+      "Cloud security lab with honeypots, SIEM analytics, and attack mapping on Azure.",
+    image: "https://placehold.co/720x420/png?text=Cloud+Security+Lab",
     tech: [
       "Azure VM",
       "Azure Sentinel",
@@ -25,7 +27,8 @@ export const projects: Project[] = [
   {
     title: "Telemetry Analysis & Anomaly Detection",
     description:
-      "Built a modular system for analyzing multivariate spacecraft telemetry, focusing on data reliability, feature extraction, and scalable pipelines for anomaly detection (NASA SMAP and MSL datasets).",
+      "Modular pipeline for spacecraft telemetry analysis and anomaly detection.",
+    image: "https://placehold.co/720x420/png?text=Telemetry+Analysis",
     tech: [
       "Python",
       "Time-Series",
@@ -38,7 +41,8 @@ export const projects: Project[] = [
   {
     title: "Algorithmic Analysis of Structured Event Data",
     description:
-      "End-to-end analytical pipeline on structured gameplay data, from cleaning and exploration to feature engineering, statistical evaluation, and outcome prediction with reproducible notebooks.",
+      "End-to-end pipeline for structured event data analysis and prediction.",
+    image: "https://placehold.co/720x420/png?text=Event+Data+Pipeline",
     tech: ["Python", "Data Analysis", "Statistics", "Jupyter"],
     github: "https://github.com/nixkitax",
     status: "Selected Project",
@@ -46,7 +50,8 @@ export const projects: Project[] = [
   {
     title: "System Performance Monitoring Tool",
     description:
-      "Real-time system monitoring app tracking CPU, memory, and runtime metrics with a focus on reliable data collection and visualization.",
+      "Real-time monitoring for CPU, memory, and runtime metrics.",
+    image: "https://placehold.co/720x420/png?text=Performance+Monitor",
     tech: ["TypeScript", "Monitoring", "Visualization", "Metrics"],
     github: "https://github.com/nixkitax",
     status: "Selected Project",

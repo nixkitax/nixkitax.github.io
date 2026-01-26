@@ -15,9 +15,11 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
     const finish = () => {
+      setIsExiting(true);
       setTimeout(() => setIsLoading(false), 450);
     };
 
@@ -36,12 +38,15 @@ const App = () => {
         <Toaster />
         <Sonner />
         {isLoading && (
-          <div className="site-loader" role="status" aria-live="polite">
+          <div
+            className={`site-loader${isExiting ? " is-exiting" : ""}`}
+            role="status"
+            aria-live="polite"
+          >
             <div className="site-loader__stack" aria-hidden="true">
               <div className="site-loader__orb" />
               <div className="site-loader__ring" />
             </div>
-            <div className="site-loader__text">Loading</div>
           </div>
         )}
         <BrowserRouter>

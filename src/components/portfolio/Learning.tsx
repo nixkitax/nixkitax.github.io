@@ -34,8 +34,12 @@ const Learning = () => {
             <div className="relative">
               <div className="absolute inset-0 rounded-3xl bg-primary/10 blur-2xl" />
               <img
-                src="/images/learning-ghost.png"
+                src="/learning-ghost-512.png"
                 alt="Playful learning avatar"
+                width={256}
+                height={256}
+                loading="lazy"
+                decoding="async"
                 className="relative z-10 h-64 w-64 object-contain"
               />
             </div>
