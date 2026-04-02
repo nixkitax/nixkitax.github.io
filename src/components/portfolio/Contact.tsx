@@ -10,8 +10,8 @@ const Contact = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "nicol.eeemanuele@icloud.com",
-      href: "mailto:nicol.eeemanuele@icloud.com",
+      value: "nicol.emanuele@proton.me",
+      href: "mailto:nicol.emanuele@proton.me",
     },
     {
       icon: Github,
@@ -108,7 +108,7 @@ const Contact = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">
-                    Internship Opportunities
+                    Contract / Consulting
                   </span>
                   <span className="text-blue-600 font-medium">
                     Open to Discuss

@@ -12,8 +12,9 @@ const About = () => {
             Education & Background
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            MSc student focused on algorithms, optimization, software engineering, and reliable
-            system design, with research interests in security and cryptography.
+            Computer Science graduate focused on algorithms, optimization,
+            software engineering, and reliable system design, with research
+            interests in security and cryptography.
           </p>
         </div>
 

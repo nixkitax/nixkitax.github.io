@@ -12,10 +12,10 @@ export const experiences: Experience[] = [
   {
     title: "Research Intern",
     company: "Provably.ai",
-    period: "Feb 2025 - Present",
+    period: "Feb 2025 - Mar 2026",
     type: "Internship",
     description:
-      "Conducting research on vector databases for efficient storage and retrieval of high-dimensional embeddings. Implementing Locality-Sensitive Hashing (LSH) for approximate nearest neighbor search and exploring scalable algorithms for real-time similarity over large-scale vectors.",
+      "Conducted research on vector databases for efficient storage and retrieval of high-dimensional embeddings. Implemented Locality-Sensitive Hashing (LSH) for approximate nearest-neighbor search and explored scalable algorithms for real-time similarity over large-scale vectors.",
     highlights: [
       "Benchmarked ANN latency/recall trade-offs on multi-million vector collections.",
       "Prototyped LSH pipelines to speed up approximate similarity queries.",

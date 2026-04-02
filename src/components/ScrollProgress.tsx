@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const ScrollProgress = () => {
-  const [progress, setProgress] = useState(0);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const element = progressRef.current;
+    if (!element) return;
+
     let raf = 0;
 
     const update = () => {
@@ -11,7 +14,10 @@ const ScrollProgress = () => {
       const scrollTop = doc.scrollTop || document.body.scrollTop;
       const scrollHeight = doc.scrollHeight - doc.clientHeight;
       const value = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
-      setProgress(Math.min(1, Math.max(0, value)));
+      element.style.setProperty(
+        "--scroll-progress",
+        String(Math.min(1, Math.max(0, value))),
+      );
     };
 
     const onScroll = () => {
@@ -30,13 +36,7 @@ const ScrollProgress = () => {
     };
   }, []);
 
-  return (
-    <div
-      className="scroll-progress"
-      style={{ "--scroll-progress": progress } as React.CSSProperties}
-      aria-hidden="true"
-    />
-  );
+  return <div ref={progressRef} className="scroll-progress" aria-hidden="true" />;
 };
 
 export default ScrollProgress;

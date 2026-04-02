@@ -38,7 +38,7 @@ const Projects = () => {
             <h3 className="text-2xl font-bold text-primary">
               Professional Experience
             </h3>
-            <span className="rounded-full border border-primary/20 bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.22em] text-primary shadow-soft">
+            <span className="rounded-full border border-primary/20 bg-white/70 px-3 py-1 text-xs font-semibold tracking-[0.08em] text-primary shadow-soft">
               Selected roles
             </span>
           </div>

@@ -6,7 +6,7 @@ const ScrollReveal = () => {
 
   useEffect(() => {
     const elements = Array.from(
-      document.querySelectorAll("section, article, footer")
+      document.querySelectorAll("section, footer")
     ).filter((el) => !el.classList.contains("no-reveal"));
 
     elements.forEach((el) => {

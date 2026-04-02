@@ -12,7 +12,7 @@ export const education: EducationItem[] = [
     institution:
       "Università degli Studi Milano-Bicocca (Erasmus: Stockholm University)",
     location: "Milan, Italy / Stockholm, Sweden",
-    year: "2023 - Present",
+    year: "2023 - 2026",
     type: "Master's",
   },
   {

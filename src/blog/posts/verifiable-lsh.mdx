@@ -1,95 +1,72 @@
 ## Motivation
 
-Nearest neighbor search is everywhere.
-Proving you did it _correctly_ without revealing the dataset is not.
+Nearest-neighbor search is easy to explain and annoying to verify.
+The core problem is simple: once retrieval becomes approximate, proving that the returned candidate is the correct one gets much harder.
+
+<Callout type="note" title="Why this matters">
+  If the retrieval system is part of a larger proof pipeline, the verifier needs more than a final score. It needs evidence that the candidate selection itself followed the intended search procedure.
+</Callout>
 
 ## High-level idea
 
-We combine:
+The rough direction is:
 
-- LSH for bucketing
-- Verifiable inner products
-- A ZK circuit enforcing correct selection
+- use LSH to cut the search space
+- compute distances only inside candidate buckets
+- enforce the final selection inside a proof-friendly circuit
 
-## What went wrong
+That means the prover is not proving the full search over the entire dataset, only a constrained and auditable path through the retrieval pipeline.
 
-- Quantization is harder than it looks
-- Halo2 layouts punish bad abstractions
-- Borrow checker pain is real
+## A tiny toy sketch
 
-## Open questions
+```ts showLineNumbers
+type Bucket = { id: string; vectors: number[][] };
 
-- Can we reduce constraints further?
-- Is there a better hash family for this setting?
+function chooseCandidate(query: number[], bucket: Bucket) {
+  let bestIndex = -1;
+  let bestScore = Number.POSITIVE_INFINITY;
 
-## Motivation
+  for (let i = 0; i < bucket.vectors.length; i += 1) {
+    const score = l2Distance(query, bucket.vectors[i]);
+    if (score < bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
+  }
 
-Nearest neighbor search is everywhere.
-Proving you did it _correctly_ without revealing the dataset is not.
+  return { bestIndex, bestScore };
+}
 
-## High-level idea
+function l2Distance(left: number[], right: number[]) {
+  let sum = 0;
 
-We combine:
+  for (let i = 0; i < left.length; i += 1) {
+    const delta = left[i] - right[i];
+    sum += delta * delta;
+  }
 
-- LSH for bucketing
-- Verifiable inner products
-- A ZK circuit enforcing correct selection
+  return sum;
+}
+```
 
-## What went wrong
+The interesting part is not the loop itself. The interesting part is how to prove that:
 
-- Quantization is harder than it looks
-- Halo2 layouts punish bad abstractions
-- Borrow checker pain is real
+1. the bucket was selected correctly
+2. the distance was computed honestly
+3. the minimum really is the minimum among the allowed candidates
 
-## Open questions
+## What usually goes wrong
 
-- Can we reduce constraints further?
-- Is there a better hash family for this setting?
+- quantization decisions leak into the circuit design much earlier than expected
+- hash-family choices that look harmless in the ANN prototype become expensive in proof land
+- lookup-heavy layouts are easy to overengineer
 
-## Motivation
-
-Nearest neighbor search is everywhere.
-Proving you did it _correctly_ without revealing the dataset is not.
-
-## High-level idea
-
-We combine:
-
-- LSH for bucketing
-- Verifiable inner products
-- A ZK circuit enforcing correct selection
-
-## What went wrong
-
-- Quantization is harder than it looks
-- Halo2 layouts punish bad abstractions
-- Borrow checker pain is real
+<Callout type="tip" title="MDX note">
+  This post now supports fenced code blocks and custom components. You can write normal Markdown, add code fences like <code>```rust</code>, and also use components such as <code>{`<Callout type="warning">...</Callout>`}</code>.
+</Callout>
 
 ## Open questions
 
-- Can we reduce constraints further?
-- Is there a better hash family for this setting?
-
-## Motivation
-
-Nearest neighbor search is everywhere.
-Proving you did it _correctly_ without revealing the dataset is not.
-
-## High-level idea
-
-We combine:
-
-- LSH for bucketing
-- Verifiable inner products
-- A ZK circuit enforcing correct selection
-
-## What went wrong
-
-- Quantization is harder than it looks
-- Halo2 layouts punish bad abstractions
-- Borrow checker pain is real
-
-## Open questions
-
-- Can we reduce constraints further?
-- Is there a better hash family for this setting?
+- how much of the bucket-selection logic should live inside the proof?
+- can witness generation stay fast when the candidate set grows?
+- which trade-off is acceptable between exactness, proof size, and latency?

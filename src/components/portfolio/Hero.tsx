@@ -13,9 +13,9 @@ const Hero = () => {
             Cybersecurity Researcher & Developer
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            M.S. Computer Science student passionate about cryptography,
-            blockchain security, and vector database research. Currently
-            pursuing advanced studies across European universities.
+            Computer Science graduate passionate about cryptography,
+            blockchain security, and vector database research, with recent work
+            across research and systems-oriented engineering.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ const Hero = () => {
             <MapPin className="w-4 h-4" />
             <span>Stockholm, Sweden • Milan, Italy</span>
           </div>
-          <div>+39 334 368 7232 • nicol.eeemanuele@icloud.com</div>
+          <div>nicol.emanuele@proton.me</div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">

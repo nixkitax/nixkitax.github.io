@@ -12,7 +12,7 @@ const Learning = () => {
       <div className="max-w-6xl mx-auto">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.08em] text-muted-foreground">
               Always learning
             </div>
             <h2 className="mt-4 text-4xl md:text-5xl font-bold">
