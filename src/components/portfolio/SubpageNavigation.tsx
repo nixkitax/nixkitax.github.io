@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Github } from "lucide-react";
 import { contact } from "@/data/contact";
 
 type NavItem = {
@@ -70,12 +71,24 @@ const SubpageNavigation = ({ items }: SubpageNavigationProps) => {
             })}
           </div>
 
-          <a
-            href={`mailto:${contact.email}`}
-            className="inline-flex items-center rounded-full border border-border/70 bg-card/80 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/20 hover:text-primary"
-          >
-            Email
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={contact.github}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open GitHub profile"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-card/80 text-foreground transition-colors hover:border-primary/20 hover:text-primary"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+
+            <a
+              href={`mailto:${contact.email}`}
+              className="inline-flex items-center rounded-full border border-border/70 bg-card/80 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/20 hover:text-primary"
+            >
+              Email
+            </a>
+          </div>
         </div>
       </div>
     </nav>

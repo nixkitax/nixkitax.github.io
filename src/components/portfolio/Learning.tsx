@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { posts } from "@/blog/post";
+import { preloadPostPage } from "@/routes/post-route";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -47,8 +48,13 @@ const Learning = () => {
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {featured.map((post) => (
-            <Link key={post.slug} to={`/blog/${post.slug}`}>
+          {featured.map((post, index) => (
+            <Link
+              key={`${post.slug}-${index}`}
+              to={`/blog/${post.slug}`}
+              onMouseEnter={preloadPostPage}
+              onFocus={preloadPostPage}
+            >
               <Card className="group relative overflow-hidden border border-border/80 bg-card/80 transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[var(--shadow-medium)]">
                 <CardHeader className="space-y-3">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

@@ -6,7 +6,6 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 import remarkMermaid from "./src/lib/mdx/remark-mermaid";
 
 const prettyCodeOptions = {
@@ -28,13 +27,16 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  build: {
+    // Mermaid ships large lazy-loaded diagram chunks; this keeps the build log signal useful.
+    chunkSizeWarningLimit: 1500,
+  },
   plugins: [
     mdx({
       remarkPlugins: [remarkGfm, remarkMath, remarkMermaid],
       rehypePlugins: [rehypeKatex, [rehypePrettyCode, prettyCodeOptions]],
     }),
     react(),
-    mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {

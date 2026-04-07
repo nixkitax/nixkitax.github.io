@@ -6,8 +6,8 @@ import { certifications, education } from "@/data/about";
 import { contact } from "@/data/contact";
 import { experiences } from "@/data/experience";
 import { projects } from "@/data/projects";
+import { preloadPostPage } from "@/routes/post-route";
 import { ArrowUpRight, Github, Linkedin, Mail, MapPin } from "lucide-react";
-import EditorialMascot from "./EditorialMascot";
 
 const formatPostDate = (value: string) =>
   new Intl.DateTimeFormat("en", {
@@ -16,9 +16,22 @@ const formatPostDate = (value: string) =>
     year: "numeric",
   }).format(new Date(value));
 
+const formatCompactPostDate = (value: string) =>
+  new Intl.DateTimeFormat("en", {
+    day: "2-digit",
+    month: "short",
+  }).format(new Date(value));
+
+const byNewestPost = (
+  left: (typeof posts)[number],
+  right: (typeof posts)[number],
+) => new Date(right.date).getTime() - new Date(left.date).getTime();
+
 const Dashboard = () => {
   const featuredProjects = projects.slice(0, 3);
-  const latestPost = posts[0];
+  const sortedPosts = [...posts].sort(byNewestPost);
+  const latestPost = sortedPosts[0];
+  const recentPosts = sortedPosts.slice(0, 3);
   const currentRole = experiences[0];
   const primaryEducation = education[0];
   const coreSkills = Array.from(
@@ -69,9 +82,9 @@ const Dashboard = () => {
 
   return (
     <main id="top" className="relative overflow-hidden pb-24">
-      <section className="no-reveal mx-auto max-w-7xl px-4 pt-28 sm:px-6 sm:pt-32">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start">
-          <div className="space-y-8">
+      <section className="no-reveal mx-auto max-w-6xl px-4 pt-28 sm:px-6 sm:pt-32">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-center">
+          <div className="space-y-8 lg:pt-0">
             <div className="space-y-5">
               <p className="section-kicker">
                 Nicol Emanuele / cybersecurity + research
@@ -87,6 +100,33 @@ const Dashboard = () => {
                 preference for clear interfaces and rigorous implementation.
               </p>
             </div>
+
+            {latestPost ? (
+              <article className="blog-card-soft editorial-panel max-w-3xl rounded-[1.5rem] border-primary/10 bg-primary/5 p-5 sm:p-6">
+                <p className="section-kicker">Latest writing</p>
+                <Link
+                  to={`/blog/${latestPost.slug}`}
+                  onMouseEnter={preloadPostPage}
+                  onFocus={preloadPostPage}
+                  className="group mt-3 inline-flex max-w-2xl items-start gap-2 text-left text-xl leading-[1.2] text-foreground transition-colors hover:text-primary sm:text-2xl"
+                >
+                  <span className="underline decoration-transparent underline-offset-4 transition group-hover:decoration-current">
+                    {latestPost.title}
+                  </span>
+                  <ArrowUpRight className="mt-1 h-4 w-4 shrink-0" />
+                </Link>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
+                  {latestPost.description}
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                  <time dateTime={latestPost.date}>
+                    {formatPostDate(latestPost.date)}
+                  </time>
+                  <span className="text-muted-foreground/40">/</span>
+                  <span>research note, thesis walk-through, implementation detail</span>
+                </div>
+              </article>
+            ) : null}
 
             <div className="flex flex-wrap gap-2">
               {coreSkills.map((skill) => (
@@ -123,7 +163,16 @@ const Dashboard = () => {
           </div>
 
           <aside className="editorial-panel rounded-[2rem] p-5 sm:p-6">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
+              <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full border border-border/70 bg-secondary/30 shadow-sm">
+                <img
+                  src="/profile.png"
+                  alt="Portrait of Nicol Emanuele"
+                  className="h-full w-full object-cover object-center"
+                  loading="eager"
+                />
+              </div>
+
               <div className="min-w-0">
                 <p className="section-kicker">Profile</p>
                 <h2 className="mt-2 text-2xl text-foreground">
@@ -174,49 +223,87 @@ const Dashboard = () => {
             {latestPost ? (
               <article className="editorial-panel rounded-[1.75rem] p-6 sm:p-7">
                 <p className="section-kicker">From the blog</p>
-                <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                  <span>Latest article</span>
-                  <span className="text-muted-foreground/40">/</span>
-                  <time dateTime={latestPost.date}>
-                    {formatPostDate(latestPost.date)}
-                  </time>
-                </div>
-                <h3 className="mt-3 max-w-2xl text-[2.1rem] leading-[1.12] text-foreground">
-                  {latestPost.title}
-                </h3>
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground">
-                  {latestPost.description}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {latestPost.tags.map((tag) => (
-                    <Badge
-                      key={`${latestPost.slug}-${tag}`}
-                      variant="outline"
-                      className="rounded-full border-border/70 text-[0.7rem]"
+                {recentPosts.length > 1 ? (
+                  <>
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                      <span>Recent notes</span>
+                      <span className="text-muted-foreground/40">/</span>
+                      <span>{String(recentPosts.length).padStart(2, "0")} visible here</span>
+                    </div>
+
+                    <div className="mt-6 divide-y divide-border/60">
+                      {recentPosts.map((post) => (
+                        <Link
+                          key={post.slug}
+                          to={`/blog/${post.slug}`}
+                          onMouseEnter={preloadPostPage}
+                          onFocus={preloadPostPage}
+                          className="group flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                              <time dateTime={post.date}>
+                                {formatCompactPostDate(post.date)}
+                              </time>
+                              <span className="text-muted-foreground/40">/</span>
+                              <Badge
+                                variant="outline"
+                                className="rounded-full border-border/70 px-2.5 py-0.5 text-[0.64rem]"
+                              >
+                                {post.tags[0]}
+                              </Badge>
+                            </div>
+                            <h3 className="mt-3 max-w-2xl text-xl leading-[1.22] text-foreground transition-colors group-hover:text-primary sm:text-2xl">
+                              {post.title}
+                            </h3>
+                          </div>
+
+                          <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                      <span>Current note</span>
+                      <span className="text-muted-foreground/40">/</span>
+                      <time dateTime={latestPost.date}>
+                        {formatPostDate(latestPost.date)}
+                      </time>
+                    </div>
+
+                    <p className="mt-6 border-l border-accent/50 pl-4 text-base leading-8 text-foreground sm:text-lg">
+                      {latestPost.homeExcerpt ?? latestPost.description}
+                    </p>
+
+                    <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                      <Badge
+                        variant="outline"
+                        className="rounded-full border-border/70 text-[0.68rem]"
+                      >
+                        {latestPost.tags[0]}
+                      </Badge>
+                      <span className="text-muted-foreground/40">/</span>
+                      <span>technical extract from the latest published note</span>
+                    </div>
+
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="mt-6 h-auto px-0 text-sm text-primary hover:bg-transparent"
                     >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="mt-6 flex flex-wrap items-center gap-4">
-                  <Button
-                    asChild
-                    variant="ghost"
-                    className="h-auto px-0 text-sm text-primary hover:bg-transparent"
-                  >
-                    <Link to={`/blog/${latestPost.slug}`}>
-                      Read the latest article
-                      <ArrowUpRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="ghost"
-                    className="h-auto px-0 text-sm text-muted-foreground hover:bg-transparent hover:text-foreground"
-                  >
-                    <Link to="/blog">Browse all notes</Link>
-                  </Button>
-                </div>
+                      <Link
+                        to={`/blog/${latestPost.slug}`}
+                        onMouseEnter={preloadPostPage}
+                        onFocus={preloadPostPage}
+                      >
+                        Read the full note
+                        <ArrowUpRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </article>
             ) : null}
           </div>
@@ -248,7 +335,11 @@ const Dashboard = () => {
                   variant="ghost"
                   className="rounded-full px-4 text-muted-foreground hover:text-foreground"
                 >
-                  <Link to={`/blog/${latestPost.slug}`}>
+                  <Link
+                    to={`/blog/${latestPost.slug}`}
+                    onMouseEnter={preloadPostPage}
+                    onFocus={preloadPostPage}
+                  >
                     Start with the latest note
                   </Link>
                 </Button>

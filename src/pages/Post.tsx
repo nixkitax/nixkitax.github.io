@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { posts } from "@/blog/post";
+import { postContent } from "@/blog/post-content";
 import { mdxComponents } from "@/components/mdx/mdx-components";
 import Footer from "@/components/portfolio/Footer";
 import SubpageNavigation from "@/components/portfolio/SubpageNavigation";
@@ -8,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
+import "katex/dist/katex.min.css";
 
 const tocLinkClassName = (level: number) => {
   if (level === 1) {
@@ -23,15 +25,16 @@ const tocLinkClassName = (level: number) => {
 
 export default function Post() {
   const { slug } = useParams();
-  const post = posts.find((p) => p.slug === slug);
+  const post = useMemo(() => posts.find((entry) => entry.slug === slug), [slug]);
   const contentRef = useRef<HTMLDivElement>(null);
   const [toc, setToc] = useState<{ id: string; text: string; level: number }[]>(
     []
   );
   const [readingMinutes, setReadingMinutes] = useState(0);
   const { toast } = useToast();
+  const Content = post ? postContent[post.slug] : null;
 
-  if (!post) {
+  if (!post || !Content) {
     return (
       <>
         <SubpageNavigation
@@ -62,13 +65,15 @@ export default function Post() {
     );
   }
 
-  const Content = post.content;
-  const formattedDate = new Date(post.date).toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-  const dateLabel = useMemo(() => formattedDate, [formattedDate]);
+  const dateLabel = useMemo(
+    () =>
+      new Date(post.date).toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }),
+    [post.date],
+  );
 
   useEffect(() => {
     if (!contentRef.current) return;
@@ -215,7 +220,7 @@ export default function Post() {
             <Separator />
             <CardContent
               ref={contentRef}
-              className="relative prose prose-sm sm:prose-base prose-slate max-w-none p-4 pt-5 sm:p-8 sm:pt-8 prose-p:leading-7 prose-headings:font-semibold prose-headings:text-foreground prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-h1:mt-0 prose-h1:mb-6 prose-h1:text-2xl sm:prose-h1:text-3xl prose-h2:border-b prose-h2:border-border/60 prose-h2:pb-2 prose-h2:mt-10 prose-h3:border-l-2 prose-h3:border-primary/40 prose-h3:pl-3"
+              className="relative prose prose-sm sm:prose-base prose-slate max-w-none p-4 pt-5 sm:p-8 sm:pt-8 prose-p:leading-7 prose-headings:font-semibold prose-headings:text-foreground prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-h1:mt-0 prose-h1:mb-6 prose-h1:text-2xl sm:prose-h1:text-3xl prose-h2:border-b prose-h2:border-border/60 prose-h2:pb-2 prose-h2:mt-10 prose-h3:border-l-2 prose-h3:border-primary/40 prose-h3:pl-3 prose-img:mx-auto prose-img:block prose-img:h-auto prose-img:w-full prose-img:max-w-full prose-img:rounded-[1.5rem] prose-img:border prose-img:border-border/70 prose-img:bg-card prose-img:shadow-[var(--shadow-soft)]"
             >
               <Content components={mdxComponents} />
             </CardContent>

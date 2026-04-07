@@ -1,17 +1,58 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 type MermaidDiagramProps = {
   chart: string;
+  className?: string;
+  compact?: boolean;
 };
 
 let mermaidInitialized = false;
 
-const MermaidDiagram = ({ chart }: MermaidDiagramProps) => {
+const MermaidDiagram = ({
+  chart,
+  className,
+  compact = false,
+}: MermaidDiagramProps) => {
   const reactId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [shouldRender, setShouldRender] = useState(false);
   const [svg, setSvg] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (shouldRender) return;
+
+    const node = containerRef.current;
+    if (!node) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setShouldRender(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldRender(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: "320px 0px",
+      },
+    );
+
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [shouldRender]);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+
     let cancelled = false;
 
     const render = async () => {
@@ -56,11 +97,18 @@ const MermaidDiagram = ({ chart }: MermaidDiagramProps) => {
     return () => {
       cancelled = true;
     };
-  }, [chart, reactId]);
+  }, [chart, reactId, shouldRender]);
 
   if (error) {
     return (
-      <div className="not-prose my-8 rounded-[1.5rem] border border-destructive/30 bg-destructive/5 p-5">
+      <div
+        ref={containerRef}
+        className={cn(
+          "not-prose rounded-[1.5rem] border border-destructive/30 bg-destructive/5 p-5",
+          compact ? "my-0" : "my-8",
+          className,
+        )}
+      >
         <p className="section-kicker text-destructive">Mermaid error</p>
         <pre className="mt-3 overflow-x-auto whitespace-pre-wrap text-sm text-muted-foreground">
           {error}
@@ -70,11 +118,25 @@ const MermaidDiagram = ({ chart }: MermaidDiagramProps) => {
   }
 
   return (
-    <div className="mermaid-diagram not-prose my-8 rounded-[1.5rem] border border-border/70 bg-card p-4 shadow-soft">
+    <div
+      ref={containerRef}
+      className={cn(
+        "mermaid-diagram not-prose rounded-[1.5rem] border border-border/70 bg-card shadow-soft",
+        compact
+          ? "my-0 h-full overflow-hidden p-3 [&_svg]:block [&_svg]:h-full [&_svg]:w-full [&_svg]:max-w-none"
+          : "my-8 p-4",
+        className,
+      )}
+    >
       {svg ? (
-        <div dangerouslySetInnerHTML={{ __html: svg }} />
+        <div
+          className={cn(compact && "h-full")}
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
       ) : (
-        <div className="text-sm text-muted-foreground">Rendering diagram…</div>
+        <div className="text-sm text-muted-foreground">
+          {shouldRender ? "Rendering diagram..." : "Diagram will load on scroll..."}
+        </div>
       )}
     </div>
   );
